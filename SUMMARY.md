@@ -1,15 +1,31 @@
-# Development Summary
+# Niue News - Project Summary
 
-## Current Status
-- ✅ Initialized Next.js project.
-- ✅ Designed and implemented modern UI matching Niue flag colors.
-- ✅ Built the "Content Idea Generator" frontend form.
-- ✅ Implemented `/api/analyze` server route for Gemini AI integration.
-- ✅ Resolved API key suspension issues by guiding the creation of a new Google Cloud project.
-- ✅ Resolved model capacity/deprecation issues by switching to the `gemini-flash-lite-latest` model.
+A global community news web app for the island nation of Niue, featuring a robust moderation system, AI-assisted content generation, and role-based access control.
 
-## Next Steps (Planned Features)
-1. **Content Moderation Dashboard:** Allow Admins and Moderators to approve or reject submitted stories.
-2. **Scheduling System:** Allow approved stories to be published immediately or at a set date/time.
-3. **Social Media Integration:** Automatically push the first three paragraphs of published articles to selected social media accounts.
-4. **e-Commerce & Subscriptions:** Implement payment features for premium articles and user subscriptions (planned for a later date).
+## Features
+
+- **Authentication & Roles:** Secure login via Google Authentication. Strict RBAC restricting dashboard features to Standard users, Moderators, Admins, and Super Admins.
+- **Article Moderation Queue:** Writers submit drafts which drop into a "Pending" queue. Moderators can read, publish, un-publish, or reject stories.
+- **Public Feed & Reading Experience:** The homepage displays beautiful, truncated article cards (maximum 3 paragraphs). Clicking through reveals the full article protected by anti-copy mechanisms (disabling right-click and selection).
+- **Reviews & Ratings:** Readers can leave 100-word reviews with star ratings and thumbs-up/down emojis on full articles.
+- **AI URL Analyzer:** Exclusive to Admins and Super Admins, a Gemini-powered tool that analyzes a URL and generates Niuean community impact steps.
+- **Global Branding & Analytics:** Custom logos, global clickable watermarks, and integrated Google Analytics tracking.
+- **Deployment:** Fully compatible with Firebase App Hosting.
+
+## Tech Stack
+- **Frontend:** Next.js 16 App Router, React, TypeScript, Vanilla CSS.
+- **Backend:** Firebase Authentication, Firestore Database, Firebase Admin SDK.
+- **AI:** Google Gemini API.
+
+## Getting Started
+
+1. Create a `.env.local` file populated with your Firebase and Gemini credentials.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
