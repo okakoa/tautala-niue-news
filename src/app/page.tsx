@@ -1,75 +1,48 @@
-"use client";
+'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase/client';
+import Link from 'next/link';
 
 export default function Home() {
-  const [url, setUrl] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [articles, setArticles] = useState<any[]>([]);
+  const [articlesLoading, setArticlesLoading] = useState(true);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!url) {
-      setError("Please enter a valid website or product URL.");
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-    setResult(null);
-
-    try {
-      const response = await fetch('/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to analyze the URL. Please try again.");
+  useEffect(() => {
+    // Fetch Published Articles
+    const fetchArticles = async () => {
+      setArticlesLoading(true);
+      try {
+        const q = query(
+          collection(db, 'articles'), 
+          where('status', '==', 'published')
+        );
+        const querySnapshot = await getDocs(q);
+        const list = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        } as any));
+        // Sort newest first
+        list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        setArticles(list);
+      } catch (err) {
+        console.error("Error fetching articles:", err);
+      } finally {
+        setArticlesLoading(false);
       }
-
-      setResult(data.result);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Convert markdown to simple HTML for rendering the result
-  const renderResult = (text: string) => {
-    const lines = text.split('\n');
-    let inList = false;
-    const elements: JSX.Element[] = [];
-
-    lines.forEach((line, index) => {
-      const trimmed = line.trim();
-      if (trimmed.startsWith('## ')) {
-        elements.push(<h2 key={index}>{trimmed.substring(3)}</h2>);
-      } else if (trimmed.startsWith('### ')) {
-        elements.push(<h3 key={index}>{trimmed.substring(4)}</h3>);
-      } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
-        elements.push(<li key={index}>{trimmed.substring(2)}</li>);
-      } else if (trimmed !== '') {
-        elements.push(<p key={index} style={{ marginBottom: '10px' }}>{trimmed}</p>);
-      }
-    });
-
-    return elements;
-  };
+    };
+    fetchArticles();
+  }, []);
 
   return (
     <main>
       <section className="hero">
         <div className="container">
-          <h1>Welcome to Tautala Niue News Hub</h1>
+          <h1>Welcome to Niue News Hub</h1>
           <p>
             The global platform connecting writers, creators, and the Niuean community. 
-            Submit a web link to auto-generate a news summary, action steps, and recommendations for our global community!
+            Read the latest news, or submit your own story for our global community!
           </p>
           <div className="categories">
             <span className="category-tag">Community</span>
@@ -83,52 +56,54 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="app-section">
-        <div className="container">
-          <div className="app-card">
-            {error && (
-              <div className="error-message">
-                ⚠️ {error}
-              </div>
-            )}
+      {/* --- COMMUNITY NEWS SECTION --- */}
+      <section style={{ backgroundColor: '#f4f6f8', padding: '60px 20px', minHeight: '500px' }}>
+        <div className="container" style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <h2 style={{ color: '#002B7F', borderBottom: '3px solid #FCD116', paddingBottom: '10px', marginBottom: '30px', textAlign: 'center', fontSize: '32px' }}>
+            Latest Community News
+          </h2>
 
-            <form onSubmit={handleSubmit}>
-              <div className="input-group">
-                <label htmlFor="urlInput">Enter a Website or Product URL to Analyze</label>
-                <div className="input-wrapper">
-                  <input
-                    type="url"
-                    id="urlInput"
-                    placeholder="https://example.com/some-news-or-product"
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                    disabled={isLoading}
-                  />
-                  <button type="submit" className="btn-primary" disabled={isLoading}>
-                    {isLoading ? 'Analyzing...' : 'Generate Impact Steps'}
-                  </button>
-                </div>
-              </div>
-            </form>
-
-            {isLoading && (
-              <div className="loading">
-                <div className="spinner"></div>
-                <p>Analyzing link and generating Niuean community impact steps...</p>
-              </div>
-            )}
-
-            {result && !isLoading && (
-              <div className="results-area">
-                <div className="result-card">
-                  <h2>Generated Action Steps & Recommendations</h2>
-                  <div className="result-content">
-                    {renderResult(result)}
+          {articlesLoading ? (
+            <div style={{ textAlign: 'center', color: '#666', padding: '40px' }}>Loading news...</div>
+          ) : articles.length === 0 ? (
+            <div style={{ textAlign: 'center', color: '#666', padding: '60px', backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #ddd', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+              <p style={{ fontSize: '20px', color: '#002B7F', fontWeight: 'bold' }}>No stories have been published yet.</p>
+              <p style={{ marginTop: '10px', fontSize: '16px' }}>Check back soon, or <Link href="/submit" style={{ color: '#CE1126', fontWeight: 'bold', textDecoration: 'underline' }}>submit a story</Link> yourself!</p>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+              {articles.map(article => (
+                <article key={article.id} style={{ backgroundColor: '#fff', borderRadius: '12px', padding: '30px', boxShadow: '0 4px 10px rgba(0,0,0,0.08)', borderTop: '5px solid #CE1126' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '15px' }}>
+                    <h3 style={{ margin: 0, color: '#002B7F', fontSize: '26px', lineHeight: '1.3' }}>{article.title}</h3>
+                    <span style={{ backgroundColor: '#FCD116', color: '#333', padding: '6px 14px', borderRadius: '16px', fontSize: '13px', fontWeight: 'bold', whiteSpace: 'nowrap', marginLeft: '15px' }}>
+                      {article.category}
+                    </span>
                   </div>
-                </div>
-              </div>
-            )}
-          </div>
+                  <p style={{ fontSize: '14px', color: '#888', marginBottom: '25px', borderBottom: '1px solid #eee', paddingBottom: '15px' }}>
+                    Written by <strong style={{color: '#333'}}>{article.authorName}</strong> | {new Date(article.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+                  </p>
+                  <div style={{ fontSize: '16px', lineHeight: '1.7', color: '#222', whiteSpace: 'pre-wrap' }}>
+                    {(() => {
+                      const paragraphs = article.content.split(/\n+/).filter((p: string) => p.trim() !== '');
+                      const isTruncated = paragraphs.length > 3;
+                      const preview = paragraphs.slice(0, 3).join('\n\n');
+                      return (
+                        <>
+                          {preview}
+                          <div style={{ marginTop: '20px' }}>
+                            <Link href={`/article/${article.id}`} style={{ color: '#002B7F', fontWeight: 'bold', textDecoration: 'none', borderBottom: '2px solid #FCD116', paddingBottom: '2px' }}>
+                              {isTruncated ? "... continue to read full article" : "Read full article"}
+                            </Link>
+                          </div>
+                        </>
+                      );
+                    })()}
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </main>

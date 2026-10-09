@@ -1,0 +1,7 @@
+I'm back. Can you read our Project Configuration and Project Summary files and give me a brief run down just so we are on the same page before we start.
+----------------------------------------------------------------------------------------------------------------------
+Can you read the most recent Implementation Plan on "Backup Firebase Data Locally (Outside Google Ecosystem)"? This is what I wanted start implementing
+----------------------------------------------------------------------------------------------------------------------
+This concerns only the Mobile app: Can you have a look at the Edit&Contribute text edit field in the Mobile version of the app. When I delete character by character going right to left and after deleting the last character in the edit field the screen switch back to the home screen. I'm expecting the cursor to stay at the beggining of the edit field for me to start typing text.
+----------------------------------------------------------------------------------------------------------------------
+I got to get some sleep, can you update the User Guides with the new frontend edit features and also the Project Summary file. After that, run the local database backup then push the project backup to GitHub. Thank you!

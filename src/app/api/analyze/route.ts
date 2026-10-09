@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     // Prepare the Gemini API Call
     const model = genAI.getGenerativeModel({ model: "gemini-flash-lite-latest" });
 
-    const prompt = `You are an expert news editor and community manager for "Tautala Niue News" - a global community news platform for the island nation of Niue.
+    const prompt = `You are an expert news editor and community manager for "Niue News" - a global community news platform for the island nation of Niue.
 
 A writer has submitted the following URL as a potential topic or source: ${url}
 

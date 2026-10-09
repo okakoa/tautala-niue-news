@@ -291,3 +291,13 @@ main {
     display: none; /* simple mobile */
   }
 }
+
+/* Watermark */
+.watermark-link {
+  opacity: 0.4;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.watermark-link:hover {
+  opacity: 1;
+}
