@@ -11,8 +11,8 @@ export async function POST(request: Request) {
     const token = authHeader.split('Bearer ')[1];
     const decodedToken = await adminAuth.verifyIdToken(token);
 
-    if (decodedToken.role !== 'super_admin') {
-      return NextResponse.json({ error: 'Forbidden: Only Super Admins can manage accounts.' }, { status: 403 });
+    if (decodedToken.role !== 'super_admin' && decodedToken.role !== 'admin') {
+      return NextResponse.json({ error: 'Forbidden: Only Super Admins and Admins can manage accounts.' }, { status: 403 });
     }
 
     const { uid, action } = await request.json();

@@ -36,8 +36,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </li>
                 <li><Link href="/dashboard/pending" style={{ color: '#333', textDecoration: 'none' }}>Pending Articles</Link></li>
                 <li><Link href="/dashboard/published" style={{ color: '#333', textDecoration: 'none' }}>Published Articles</Link></li>
-                <li><Link href="/dashboard/users" style={{ color: '#333', textDecoration: 'none' }}>Manage Users</Link></li>
               </>
+            )}
+
+            {/* Links for admins and super admins */}
+            {(role === 'super_admin' || role === 'admin') && (
+              <li><Link href="/dashboard/users" style={{ color: '#333', textDecoration: 'none' }}>Manage Users</Link></li>
             )}
 
             {/* Links for super admins only */}

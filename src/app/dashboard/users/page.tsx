@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase/client';
 import { useAuth } from '@/context/AuthContext';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 export default function ManageUsersPage() {
   const { user } = useAuth();
@@ -82,7 +83,8 @@ export default function ManageUsersPage() {
   if (loading) return <div>Loading users...</div>;
 
   return (
-    <div>
+    <ProtectedRoute allowedRoles={['super_admin', 'admin']}>
+      <div>
       <h2 style={{ color: '#002B7F', borderBottom: '2px solid #FCD116', paddingBottom: '10px' }}>Manage Users</h2>
       
       {message && (
@@ -160,5 +162,6 @@ export default function ManageUsersPage() {
         * Note: As a safety precaution, you cannot change the role, disable, or delete your own account here.
       </p>
     </div>
+    </ProtectedRoute>
   );
 }

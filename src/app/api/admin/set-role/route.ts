@@ -12,9 +12,9 @@ export async function POST(request: Request) {
     const token = authHeader.split('Bearer ')[1];
     const decodedToken = await adminAuth.verifyIdToken(token);
 
-    // Only allow super_admins to change roles
-    if (decodedToken.role !== 'super_admin') {
-      return NextResponse.json({ error: 'Forbidden: Only Super Admins can assign roles.' }, { status: 403 });
+    // Only allow super_admins and admins to change roles
+    if (decodedToken.role !== 'super_admin' && decodedToken.role !== 'admin') {
+      return NextResponse.json({ error: 'Forbidden: Only Super Admins and Admins can assign roles.' }, { status: 403 });
     }
 
     const { uid, newRole } = await request.json();
