@@ -21,6 +21,7 @@ export default function MyDraftsPage() {
   const [editImagePreviewUrl, setEditImagePreviewUrl] = useState('');
   const [editImageCredit, setEditImageCredit] = useState('');
   const [savingStatus, setSavingStatus] = useState('');
+  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -77,6 +78,7 @@ export default function MyDraftsPage() {
     setEditImagePreviewUrl(article.imageUrl || '');
     setEditImageCredit(article.imageCredit || '');
     setEditImageFile(null);
+    setShowPreview(false);
   };
 
   const cancelEditing = () => {
@@ -87,6 +89,7 @@ export default function MyDraftsPage() {
     setEditImagePreviewUrl('');
     setEditImageCredit('');
     setEditImageFile(null);
+    setShowPreview(false);
   };
 
   const saveEdit = async (id: string) => {
@@ -234,7 +237,42 @@ export default function MyDraftsPage() {
                     >
                       Cancel
                     </button>
+                    <button 
+                      onClick={() => setShowPreview(!showPreview)}
+                      style={{ padding: '8px 16px', backgroundColor: '#002B7F', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+                    >
+                      {showPreview ? 'Hide Preview' : 'Preview Article'}
+                    </button>
                   </div>
+                  
+                  {showPreview && (
+                    <div style={{ marginTop: '30px', paddingTop: '20px', borderTop: '2px solid #eee' }}>
+                      <h2 style={{ color: '#002B7F', marginBottom: '15px' }}>Article Preview</h2>
+                      <div style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '20px', backgroundColor: '#f9f9f9' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
+                          <h3 style={{ margin: 0, color: '#002B7F', fontSize: '24px' }}>{editTitle || 'Your Headline Here'}</h3>
+                          <span style={{ backgroundColor: '#FCD116', color: '#333', padding: '4px 10px', borderRadius: '12px', fontSize: '12px', fontWeight: 'bold' }}>
+                            {editCategory}
+                          </span>
+                        </div>
+                        
+                        <p style={{ fontSize: '13px', color: '#666', marginBottom: '15px' }}>
+                          By <strong>{user?.displayName || user?.email?.split('@')[0] || 'Anonymous'}</strong> on {new Date().toLocaleDateString()}
+                        </p>
+            
+                        {editImagePreviewUrl && (
+                          <div style={{ marginBottom: '20px' }}>
+                            <img src={editImagePreviewUrl} alt="Article Header" style={{ width: '100%', maxHeight: '400px', objectFit: 'cover', borderRadius: '4px' }} />
+                            {editImageCredit && <p style={{ fontSize: '12px', color: '#888', marginTop: '5px', fontStyle: 'italic' }}>{editImageCredit}</p>}
+                          </div>
+                        )}
+                        
+                        <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '4px', border: '1px solid #eee', whiteSpace: 'pre-wrap', fontSize: '16px', lineHeight: '1.6' }}>
+                          {editContent || 'Your story content will appear here...'}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 // --- VIEW MODE UI ---
