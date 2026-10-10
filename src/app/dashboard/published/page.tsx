@@ -164,7 +164,10 @@ export default function PublishedArticlesPage() {
                     <button 
                       onClick={() => {
                         const url = encodeURIComponent(`${window.location.origin}/article/${article.id}`);
-                        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'width=600,height=400');
+                        const paragraphs = article.content.split(/\n+/).filter((p: string) => p.trim() !== '');
+                        const top3 = paragraphs.slice(0, 3).join('\n\n');
+                        const quote = encodeURIComponent(top3);
+                        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${quote}`, '_blank', 'width=600,height=400');
                       }}
                       style={{ padding: '8px 16px', backgroundColor: '#1877F2', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
                     >
