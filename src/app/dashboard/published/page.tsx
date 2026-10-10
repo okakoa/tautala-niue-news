@@ -162,6 +162,15 @@ export default function PublishedArticlesPage() {
                   
                   <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                     <button 
+                      onClick={() => {
+                        const url = encodeURIComponent(`${window.location.origin}/article/${article.id}`);
+                        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'width=600,height=400');
+                      }}
+                      style={{ padding: '8px 16px', backgroundColor: '#1877F2', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+                    >
+                      Share to Facebook
+                    </button>
+                    <button 
                       onClick={() => handleAction(article.id, 'unpublished')}
                       style={{ padding: '8px 16px', backgroundColor: '#f0ad4e', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
                     >

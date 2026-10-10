@@ -29,11 +29,12 @@ This document serves as the roadmap for the Niue News web application. It outlin
 ### 2. Social Media Auto-Push
 **Goal:** Automatically push the first three paragraphs of an article, along with a link, to selected social media accounts when the article goes live.
 - **Tasks:**
-  - Identify target social media platforms (e.g., Facebook Page, X/Twitter).
-  - Set up developer accounts and API keys for the selected platforms.
-  - Implement Firebase Cloud Functions to trigger on document creation/update (when `status` changes to `published`).
-  - Extract the first 3 paragraphs and format the social media post.
-  - Integrate with social media APIs to dispatch the post.
+  - 📝 **Target Platform:** Facebook Page.
+  - 📝 **Credentials Needed:** Facebook Developer App, Page ID, and a never-expiring Page Access Token.
+  - 📝 **Architecture:** 
+    1. Create a secure backend API route (`/api/social/facebook`) that takes a published article, extracts the first three paragraphs, formats a link to the site, and sends it to the Facebook Graph API.
+    2. Trigger this API automatically when a moderator clicks "Approve & Publish Now" and from the backend cron job when a scheduled article goes live.
+  - 🚧 **Current Step:** Implementing a standard manual "Share to Facebook" button for moderators to test the sharing functionality before fully automating the API triggers.
 
 ## 📅 Phase 3: Monetization (Future Implementation)
 
