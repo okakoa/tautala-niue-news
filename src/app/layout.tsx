@@ -35,7 +35,7 @@ export default function RootLayout({
               src="/watermark.png" 
               alt="Niue News Watermark" 
               style={{ 
-                width: '150px', 
+                width: '120px', 
                 height: 'auto', 
                 display: 'block'
               }} 
