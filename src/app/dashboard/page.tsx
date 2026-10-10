@@ -8,7 +8,7 @@ import { db } from '@/lib/firebase/client';
 export default function DashboardOverview() {
   const { user } = useAuth();
   const [role, setRole] = useState<string>('Loading...');
-  const [stats, setStats] = useState({ pending: 0, published: 0 });
+  const [stats, setStats] = useState({ pending: 0, published: 0, unpublished: 0 });
 
   useEffect(() => {
     if (user) {
@@ -23,15 +23,18 @@ export default function DashboardOverview() {
     try {
       const qPending = query(collection(db, 'articles'), where('status', '==', 'pending'));
       const qPublished = query(collection(db, 'articles'), where('status', '==', 'published'));
+      const qUnpublished = query(collection(db, 'articles'), where('status', '==', 'unpublished'));
       
-      const [pendingSnap, publishedSnap] = await Promise.all([
+      const [pendingSnap, publishedSnap, unpublishedSnap] = await Promise.all([
         getDocs(qPending),
-        getDocs(qPublished)
+        getDocs(qPublished),
+        getDocs(qUnpublished)
       ]);
       
       setStats({
         pending: pendingSnap.size,
-        published: publishedSnap.size
+        published: publishedSnap.size,
+        unpublished: unpublishedSnap.size
       });
     } catch (err) {
       console.error("Error fetching stats:", err);
@@ -61,6 +64,10 @@ export default function DashboardOverview() {
           <div style={{ padding: '20px', backgroundColor: '#f9f9f9', border: '1px solid #ddd', borderRadius: '8px', width: '150px', textAlign: 'center' }}>
             <h2 style={{ color: '#002B7F', margin: 0 }}>{stats.published}</h2>
             <p style={{ margin: '5px 0 0 0', color: '#666' }}>Published</p>
+          </div>
+          <div style={{ padding: '20px', backgroundColor: '#f9f9f9', border: '1px solid #ddd', borderRadius: '8px', width: '150px', textAlign: 'center' }}>
+            <h2 style={{ color: '#f0ad4e', margin: 0 }}>{stats.unpublished}</h2>
+            <p style={{ margin: '5px 0 0 0', color: '#666' }}>Un-Published</p>
           </div>
         </div>
       </div>

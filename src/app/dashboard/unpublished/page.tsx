@@ -5,7 +5,7 @@ import { collection, getDocs, query, where, doc, updateDoc } from 'firebase/fire
 import { db } from '@/lib/firebase/client';
 import { useAuth } from '@/context/AuthContext';
 
-export default function PendingArticlesPage() {
+export default function UnpublishedArticlesPage() {
   const { user } = useAuth();
   const [articles, setArticles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -16,18 +16,15 @@ export default function PendingArticlesPage() {
   const [editContent, setEditContent] = useState('');
   const [editTitle, setEditTitle] = useState('');
 
-  // Scheduling state
-  const [schedulingId, setSchedulingId] = useState<string | null>(null);
-  const [scheduleDate, setScheduleDate] = useState<string>('');
-
   useEffect(() => {
-    fetchPendingArticles();
+    fetchUnpublishedArticles();
   }, []);
 
-  const fetchPendingArticles = async () => {
+  const fetchUnpublishedArticles = async () => {
     setLoading(true);
     try {
-      const q = query(collection(db, 'articles'), where('status', '==', 'pending'));
+      // Fetch only unpublished articles
+      const q = query(collection(db, 'articles'), where('status', '==', 'unpublished'));
       const querySnapshot = await getDocs(q);
       const list = querySnapshot.docs.map(doc => ({
         id: doc.id,
@@ -44,7 +41,7 @@ export default function PendingArticlesPage() {
     }
   };
 
-  const handleAction = async (id: string, action: 'published' | 'unpublished' | 'draft' | 'rejected') => {
+  const handleAction = async (id: string, action: 'published' | 'draft' | 'rejected') => {
     if (!user) return;
     try {
       await updateDoc(doc(db, 'articles', id), {
@@ -52,40 +49,8 @@ export default function PendingArticlesPage() {
         moderatedBy: user.uid,
         updatedAt: new Date().toISOString()
       });
-      setMessage(`Article ${action} successfully!`);
-      fetchPendingArticles(); // Refresh the list
-      setTimeout(() => setMessage(''), 3000);
-    } catch (err: any) {
-      setMessage(`Error: ${err.message}`);
-    }
-  };
-
-  const handleSchedule = async (id: string) => {
-    if (!user) return;
-    if (!scheduleDate) {
-      setMessage('Please select a date and time.');
-      setTimeout(() => setMessage(''), 3000);
-      return;
-    }
-    
-    const scheduledTime = new Date(scheduleDate).getTime();
-    if (scheduledTime <= Date.now()) {
-      setMessage('Scheduled time must be in the future.');
-      setTimeout(() => setMessage(''), 3000);
-      return;
-    }
-
-    try {
-      await updateDoc(doc(db, 'articles', id), {
-        status: 'scheduled',
-        scheduledPublishDate: new Date(scheduleDate).toISOString(),
-        moderatedBy: user.uid,
-        updatedAt: new Date().toISOString()
-      });
-      setMessage(`Article scheduled successfully!`);
-      setSchedulingId(null);
-      setScheduleDate('');
-      fetchPendingArticles();
+      setMessage(`Article status changed to ${action} successfully!`);
+      fetchUnpublishedArticles(); // Refresh the list
       setTimeout(() => setMessage(''), 3000);
     } catch (err: any) {
       setMessage(`Error: ${err.message}`);
@@ -115,18 +80,18 @@ export default function PendingArticlesPage() {
       });
       setMessage('Article text updated successfully!');
       setEditingId(null);
-      fetchPendingArticles();
+      fetchUnpublishedArticles();
       setTimeout(() => setMessage(''), 3000);
     } catch (err: any) {
       setMessage(`Error saving edit: ${err.message}`);
     }
   };
 
-  if (loading) return <div>Loading pending articles...</div>;
+  if (loading) return <div>Loading unpublished articles...</div>;
 
   return (
     <div>
-      <h2 style={{ color: '#002B7F', borderBottom: '2px solid #FCD116', paddingBottom: '10px' }}>Pending Articles</h2>
+      <h2 style={{ color: '#002B7F', borderBottom: '2px solid #FCD116', paddingBottom: '10px' }}>Un-Published Articles</h2>
       
       {message && (
         <div style={{ padding: '10px', margin: '15px 0', backgroundColor: message.includes('Error') ? '#ffe6e6' : '#e6ffe6', border: message.includes('Error') ? '1px solid #CE1126' : '1px solid #28a745', borderRadius: '4px', color: '#333', fontWeight: 'bold' }}>
@@ -135,7 +100,7 @@ export default function PendingArticlesPage() {
       )}
 
       {articles.length === 0 ? (
-        <p style={{ marginTop: '20px', color: '#666', fontStyle: 'italic' }}>No articles currently pending review. Great job!</p>
+        <p style={{ marginTop: '20px', color: '#666', fontStyle: 'italic' }}>There are no un-published articles.</p>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '20px' }}>
           {articles.map(article => (
@@ -184,12 +149,6 @@ export default function PendingArticlesPage() {
                       <span style={{ backgroundColor: '#FCD116', color: '#333', padding: '4px 10px', borderRadius: '12px', fontSize: '12px', fontWeight: 'bold' }}>
                         {article.category}
                       </span>
-                      <button 
-                        onClick={() => startEditing(article)}
-                        style={{ padding: '6px 12px', backgroundColor: '#e2e8f0', color: '#002B7F', border: '1px solid #cbd5e1', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
-                      >
-                        ✏️ Edit Text
-                      </button>
                     </div>
                   </div>
                   
@@ -208,65 +167,20 @@ export default function PendingArticlesPage() {
                     {article.content}
                   </div>
                   
-                  {schedulingId === article.id ? (
-                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap', backgroundColor: '#eef2f5', padding: '15px', borderRadius: '4px', border: '1px solid #cce' }}>
-                      <label style={{ fontWeight: 'bold', color: '#002B7F' }}>Select Date & Time:</label>
-                      <input 
-                        type="datetime-local" 
-                        value={scheduleDate} 
-                        onChange={(e) => setScheduleDate(e.target.value)}
-                        style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-                      />
-                      <button 
-                        onClick={() => handleSchedule(article.id)}
-                        style={{ padding: '8px 16px', backgroundColor: '#002B7F', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
-                      >
-                        Confirm Schedule
-                      </button>
-                      <button 
-                        onClick={() => {
-                          setSchedulingId(null);
-                          setScheduleDate('');
-                        }}
-                        style={{ padding: '8px 16px', backgroundColor: '#ccc', color: '#333', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  ) : (
-                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                      <button 
-                        onClick={() => handleAction(article.id, 'published')}
-                        style={{ padding: '8px 16px', backgroundColor: '#28a745', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
-                      >
-                        Approve & Publish Now
-                      </button>
-                      <button 
-                        onClick={() => setSchedulingId(article.id)}
-                        style={{ padding: '8px 16px', backgroundColor: '#17a2b8', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
-                      >
-                        Schedule Publish
-                      </button>
-                      <button 
-                        onClick={() => handleAction(article.id, 'unpublished')}
-                        style={{ padding: '8px 16px', backgroundColor: '#f0ad4e', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
-                      >
-                        Un-Publish
-                      </button>
-                      <button 
-                        onClick={() => handleAction(article.id, 'draft')}
-                        style={{ padding: '8px 16px', backgroundColor: '#6c757d', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
-                      >
-                        Move to Draft
-                      </button>
-                      <button 
-                        onClick={() => handleAction(article.id, 'rejected')}
-                        style={{ padding: '8px 16px', backgroundColor: '#CE1126', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
-                      >
-                        Reject
-                      </button>
-                    </div>
-                  )}
+                  <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                    <button 
+                      onClick={() => handleAction(article.id, 'published')}
+                      style={{ padding: '8px 16px', backgroundColor: '#28a745', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+                    >
+                      Re-Publish
+                    </button>
+                    <button 
+                      onClick={() => handleAction(article.id, 'draft')}
+                      style={{ padding: '8px 16px', backgroundColor: '#6c757d', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+                    >
+                      Move to Draft
+                    </button>
+                  </div>
                 </>
               )}
             </div>

@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { updateProfile } from 'firebase/auth';
 import { db } from '@/lib/firebase/client';
 
 export default function ProfilePage() {
@@ -15,6 +16,12 @@ export default function ProfilePage() {
   const [userRole, setUserRole] = useState('standard');
   const [allowedRoles, setAllowedRoles] = useState<string[]>(['super_admin', 'admin']);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
+
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [displayName, setDisplayName] = useState('');
+  const [isUpdatingName, setIsUpdatingName] = useState(false);
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [nameSuccess, setNameSuccess] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -37,10 +44,30 @@ export default function ProfilePage() {
       user.getIdTokenResult().then(result => {
         setUserRole((result.claims.role as string) || 'standard');
       });
+      setDisplayName(user.displayName || '');
     }
   }, [user]);
 
   const hasAccessToAnalyzer = allowedRoles.includes(userRole);
+
+  const handleUpdateName = async () => {
+    if (!user) return;
+    setIsUpdatingName(true);
+    setNameError(null);
+    setNameSuccess(null);
+    try {
+      await updateProfile(user, { displayName });
+      await updateDoc(doc(db, 'users', user.uid), {
+        displayName: displayName
+      });
+      setNameSuccess('Name updated successfully.');
+      setIsEditingName(false);
+    } catch (err: any) {
+      setNameError(err.message || 'Failed to update name.');
+    } finally {
+      setIsUpdatingName(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,6 +131,53 @@ export default function ProfilePage() {
         <h3 style={{ color: '#333', margin: '0 0 10px 0' }}>Account Info</h3>
         <p><strong>Email:</strong> {user?.email}</p>
         <p><strong>Role:</strong> <span style={{ textTransform: 'uppercase', fontWeight: 'bold', color: '#CE1126' }}>{userRole}</span></p>
+        
+        <div style={{ marginTop: '10px' }}>
+          <p style={{ margin: '0 0 5px 0' }}><strong>Name:</strong></p>
+          {isEditingName ? (
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <input
+                type="text"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                disabled={isUpdatingName}
+                placeholder="Enter your name"
+                style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', flex: 1, maxWidth: '300px' }}
+              />
+              <button 
+                onClick={handleUpdateName} 
+                disabled={isUpdatingName}
+                style={{ padding: '8px 16px', backgroundColor: '#002B7F', color: '#fff', border: 'none', borderRadius: '4px', cursor: isUpdatingName ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}
+              >
+                {isUpdatingName ? 'Saving...' : 'Save'}
+              </button>
+              <button 
+                onClick={() => {
+                  setIsEditingName(false);
+                  setDisplayName(user?.displayName || '');
+                  setNameError(null);
+                  setNameSuccess(null);
+                }} 
+                disabled={isUpdatingName}
+                style={{ padding: '8px 16px', backgroundColor: '#ccc', color: '#333', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <span style={{ fontSize: '16px' }}>{user?.displayName || 'N/A'}</span>
+              <button 
+                onClick={() => setIsEditingName(true)}
+                style={{ padding: '4px 12px', backgroundColor: '#f0f0f0', border: '1px solid #ddd', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
+              >
+                Edit
+              </button>
+            </div>
+          )}
+          {nameError && <p style={{ color: '#CE1126', fontSize: '14px', margin: '5px 0 0 0' }}>{nameError}</p>}
+          {nameSuccess && <p style={{ color: '#28a745', fontSize: '14px', margin: '5px 0 0 0' }}>{nameSuccess}</p>}
+        </div>
       </div>
 
       <h3 style={{ color: '#002B7F', marginBottom: '15px' }}>URL Analyzer Tool</h3>

@@ -5,8 +5,11 @@ A global community news web app for the island nation of Niue, featuring a robus
 ## Features
 
 - **Authentication & Roles:** Secure login via Google Authentication. Strict RBAC restricting dashboard features to Standard users, Moderators, Admins, and Super Admins.
-- **Article Moderation Queue:** Writers submit drafts which drop into a "Pending" queue. Moderators can read, publish, un-publish, or reject stories.
-- **Public Feed & Reading Experience:** The homepage displays beautiful, truncated article cards (maximum 3 paragraphs). Clicking through reveals the full article protected by anti-copy mechanisms (disabling right-click and selection).
+- **Article Moderation Queue:** Writers submit drafts which drop into a "Pending" queue. Moderators can read, publish, un-publish, or reject stories (sending them back as Drafts).
+- **Drafts Management:** Writers have a "My Drafts" page where they can edit rejected drafts and re-submit them.
+- **Article Publishing:** Moderators can publish articles immediately or schedule them to be published automatically at a future date and time.
+- **Media Support:** Writers can upload images which are automatically compressed on the client side and saved directly into the database as Base64 strings to bypass Firebase Storage CORS limitations.
+- **Public Feed & Reading Experience:** The homepage displays beautiful, truncated article cards (maximum 3 paragraphs) with attached media. Clicking through reveals the full article protected by anti-copy mechanisms (disabling right-click and selection).
 - **Reviews & Ratings:** Readers can leave 100-word reviews with star ratings and thumbs-up/down emojis on full articles.
 - **AI URL Analyzer:** Exclusive to Admins and Super Admins, a Gemini-powered tool that analyzes a URL and generates Niuean community impact steps.
 - **Global Branding & Analytics:** Custom logos, global clickable watermarks, and integrated Google Analytics tracking.

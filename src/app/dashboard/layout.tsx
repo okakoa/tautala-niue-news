@@ -27,6 +27,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             
             {/* Links for all users */}
             <li><Link href="/dashboard/profile" style={{ color: '#333', textDecoration: 'none', fontWeight: 'bold' }}>My Profile & Tools</Link></li>
+            <li><Link href="/dashboard/drafts" style={{ color: '#333', textDecoration: 'none', fontWeight: 'bold' }}>My Drafts</Link></li>
             
             {/* Links for moderators and above */}
             {isModerator && (
@@ -34,8 +35,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <li style={{ marginTop: '15px', paddingTop: '15px', borderTop: '1px solid #ddd' }}>
                   <Link href="/dashboard" style={{ color: '#333', textDecoration: 'none' }}>Moderation Overview</Link>
                 </li>
+                <li><Link href="/dashboard/status" style={{ color: '#333', textDecoration: 'none' }}>Articles Status</Link></li>
                 <li><Link href="/dashboard/pending" style={{ color: '#333', textDecoration: 'none' }}>Pending Articles</Link></li>
                 <li><Link href="/dashboard/published" style={{ color: '#333', textDecoration: 'none' }}>Published Articles</Link></li>
+                <li><Link href="/dashboard/unpublished" style={{ color: '#333', textDecoration: 'none' }}>Un-Published Articles</Link></li>
               </>
             )}
 

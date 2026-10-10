@@ -179,6 +179,13 @@ function ArticleContent() {
           <p style={{ fontSize: '16px', color: '#666', borderBottom: '1px solid #eee', paddingBottom: '20px', marginBottom: '40px' }}>
             Written by <strong style={{color: '#333'}}>{article.authorName}</strong> | {new Date(article.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
           </p>
+
+          {article.imageUrl && (
+            <div style={{ marginBottom: '30px' }}>
+              <img src={article.imageUrl} alt="Article Header" style={{ width: '100%', maxHeight: '500px', objectFit: 'cover', borderRadius: '8px' }} />
+              {article.imageCredit && <p style={{ fontSize: '13px', color: '#888', marginTop: '8px', fontStyle: 'italic' }}>{article.imageCredit}</p>}
+            </div>
+          )}
           
           <div 
             style={{ 

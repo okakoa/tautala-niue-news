@@ -51,6 +51,7 @@ export default function Home() {
             <span className="category-tag">Politics</span>
             <span className="category-tag">Sports</span>
             <span className="category-tag">Entertainments</span>
+            <span className="category-tag">Technology</span>
             <span className="category-tag">Regional & Global</span>
           </div>
         </div>
@@ -83,6 +84,14 @@ export default function Home() {
                   <p style={{ fontSize: '14px', color: '#888', marginBottom: '25px', borderBottom: '1px solid #eee', paddingBottom: '15px' }}>
                     Written by <strong style={{color: '#333'}}>{article.authorName}</strong> | {new Date(article.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
                   </p>
+
+                  {article.imageUrl && (
+                    <div style={{ marginBottom: '20px' }}>
+                      <img src={article.imageUrl} alt="Article Header" style={{ width: '100%', maxHeight: '300px', objectFit: 'cover', borderRadius: '6px' }} />
+                      {article.imageCredit && <p style={{ fontSize: '11px', color: '#aaa', marginTop: '5px', fontStyle: 'italic' }}>{article.imageCredit}</p>}
+                    </div>
+                  )}
+
                   <div style={{ fontSize: '16px', lineHeight: '1.7', color: '#222', whiteSpace: 'pre-wrap' }}>
                     {(() => {
                       const paragraphs = article.content.split(/\n+/).filter((p: string) => p.trim() !== '');
