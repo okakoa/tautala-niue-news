@@ -161,7 +161,27 @@ function ArticleContent() {
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
         
         {/* ARTICLE CONTENT */}
-        <div style={{ backgroundColor: '#fff', borderRadius: '12px', padding: '50px', boxShadow: '0 4px 15px rgba(0,0,0,0.05)', borderTop: '6px solid #CE1126', marginBottom: '40px' }}>
+        <div 
+          style={{ 
+            backgroundColor: '#fff', 
+            borderRadius: '12px', 
+            padding: '50px', 
+            boxShadow: '0 4px 15px rgba(0,0,0,0.05)', 
+            borderTop: '6px solid #CE1126', 
+            marginBottom: '40px',
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            MozUserSelect: 'none',
+            msUserSelect: 'none'
+          }}
+          onCopy={(e) => {
+            e.preventDefault();
+            alert('Copying content is disabled by the author to protect intellectual property.');
+          }}
+          onCut={(e) => e.preventDefault()}
+          onDragStart={(e) => e.preventDefault()}
+          onContextMenu={(e) => e.preventDefault()}
+        >
           <Link href="/" style={{ display: 'inline-block', marginBottom: '30px', color: '#002B7F', textDecoration: 'none', fontWeight: 'bold', fontSize: '16px' }}>
             &larr; Back to News Hub
           </Link>
@@ -192,17 +212,8 @@ function ArticleContent() {
               fontSize: '18px', 
               lineHeight: '1.8', 
               color: '#222', 
-              whiteSpace: 'pre-wrap',
-              userSelect: 'none',
-              WebkitUserSelect: 'none',
-              MozUserSelect: 'none',
-              msUserSelect: 'none'
+              whiteSpace: 'pre-wrap'
             }}
-            onCopy={(e) => {
-              e.preventDefault();
-              alert('Copying content is disabled by the author to protect intellectual property.');
-            }}
-            onContextMenu={(e) => e.preventDefault()}
           >
             {article.content}
           </div>

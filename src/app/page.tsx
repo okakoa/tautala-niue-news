@@ -74,7 +74,27 @@ export default function Home() {
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
               {articles.map(article => (
-                <article key={article.id} style={{ backgroundColor: '#fff', borderRadius: '12px', padding: '30px', boxShadow: '0 4px 10px rgba(0,0,0,0.08)', borderTop: '5px solid #CE1126' }}>
+                <article 
+                  key={article.id} 
+                  style={{ 
+                    backgroundColor: '#fff', 
+                    borderRadius: '12px', 
+                    padding: '30px', 
+                    boxShadow: '0 4px 10px rgba(0,0,0,0.08)', 
+                    borderTop: '5px solid #CE1126',
+                    userSelect: 'none',
+                    WebkitUserSelect: 'none',
+                    MozUserSelect: 'none',
+                    msUserSelect: 'none'
+                  }}
+                  onCopy={(e) => {
+                    e.preventDefault();
+                    alert('Copying content is disabled by the author to protect intellectual property.');
+                  }}
+                  onCut={(e) => e.preventDefault()}
+                  onDragStart={(e) => e.preventDefault()}
+                  onContextMenu={(e) => e.preventDefault()}
+                >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '15px' }}>
                     <h3 style={{ margin: 0, color: '#002B7F', fontSize: '26px', lineHeight: '1.3' }}>{article.title}</h3>
                     <span style={{ backgroundColor: '#FCD116', color: '#333', padding: '6px 14px', borderRadius: '16px', fontSize: '13px', fontWeight: 'bold', whiteSpace: 'nowrap', marginLeft: '15px' }}>
