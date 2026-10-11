@@ -682,6 +682,75 @@ a {
   overflow-x: auto;
 }
 
+.dashboard-menu-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dashboard-menu-link {
+  color: #334155;
+  text-decoration: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.dashboard-menu-link:hover {
+  background-color: rgba(0, 43, 127, 0.08);
+  color: var(--color-navy);
+}
+
+.dashboard-menu-link.active {
+  background-color: rgba(0, 43, 127, 0.12);
+  color: var(--color-navy);
+  font-weight: 700;
+}
+
+.dashboard-menu-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.badge-draft {
+  background-color: #e2e8f0;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.badge-pending {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.badge-published {
+  background-color: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.badge-unpublished {
+  background-color: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+}
+
 @media (max-width: 768px) {
   .dashboard-wrapper {
     flex-direction: column;
