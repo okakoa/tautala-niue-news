@@ -222,7 +222,7 @@ export default function MyDraftsPage() {
                     style={{ width: '100%', padding: '10px', fontSize: '15px', fontFamily: 'inherit', border: '2px solid #002B7F', borderRadius: '4px', resize: 'vertical' }}
                   />
                   
-                  <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                  <div style={{ display: 'flex', gap: '10px', marginTop: '10px', flexWrap: 'wrap' }}>
                     <button 
                       onClick={() => saveEdit(article.id)}
                       disabled={!!savingStatus}

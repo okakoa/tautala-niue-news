@@ -181,7 +181,7 @@ export default function SubmitStoryPage() {
           />
         </div>
 
-        <div style={{ display: 'flex', gap: '15px', marginTop: '10px' }}>
+        <div style={{ display: 'flex', gap: '15px', marginTop: '10px', flexWrap: 'wrap' }}>
           <button 
             type="submit" 
             disabled={loading}

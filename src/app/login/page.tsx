@@ -39,7 +39,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '100px auto', padding: '20px', backgroundColor: '#FFFFFF', borderTop: '5px solid #002B7F', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', borderRadius: '8px' }}>
+    <div style={{ maxWidth: '420px', width: 'calc(100% - 32px)', margin: '40px auto 80px auto', padding: '24px 20px', backgroundColor: '#FFFFFF', borderTop: '5px solid #002B7F', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', borderRadius: '10px' }}>
       <h2 style={{ color: '#002B7F', textAlign: 'center', marginBottom: '20px' }}>
         {isSignUp ? 'Create an Account' : 'Sign In'}
       </h2>

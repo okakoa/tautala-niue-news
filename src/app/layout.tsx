@@ -1,11 +1,17 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import Navbar from '@/components/Navbar';
 
 export const metadata: Metadata = {
-  title: 'Niue News',
+  title: 'Niue News Hub - Community News',
   description: 'A global community news platform for the island nation of Niue.',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({
@@ -24,21 +30,11 @@ export default function RootLayout({
             target="_blank" 
             rel="noopener noreferrer"
             className="watermark-link"
-            style={{
-              position: 'fixed', 
-              bottom: '20px', 
-              right: '20px', 
-              zIndex: 9999
-            }}
+            aria-label="Oka Apps Projects"
           >
             <img 
               src="/watermark.png" 
               alt="Niue News Watermark" 
-              style={{ 
-                width: '120px', 
-                height: 'auto', 
-                display: 'block'
-              }} 
             />
           </a>
         </AuthProvider>
