@@ -23,3 +23,21 @@ Add the Facebook Login for Business product to the app.
 Use the Graph API Explorer to generate a Page Access Token for your new test page.
 Make sure you grant the pages_manage_posts and pages_read_engagement permissions.
 Take all the time you need, and just reply here with the Page ID and the Page Access Token whenever you're ready!
+----------------------------------------------------------------------------------------------------------------------
+Auto-post only seen in the account that created the News Niue Facebook page!
+
+The reason only you can see it right now is Meta's Development Mode sandbox rule:
+
+When a developer app is first created, it is set to "In Development" mode by default.
+In Development mode, Meta only shows API-generated posts to the App Admin / Developer (your account) so you can safely test without broadcasting to the public before you're ready.
+How to Make Posts Visible to the Entire Public (Switch to "Live Mode")
+Whenever you are ready to make posts visible to everyone in the world:
+
+Go to developers.facebook.com and open your app (New Niue Auto Post).
+At the top of the screen (in the header bar), look for the toggle switch that says: App Mode: In development
+Click the toggle to switch it to Live.
+(If prompted):
+Privacy Policy URL: Meta usually asks for a link to a privacy policy (you can provide your website link e.g. https://.../privacy or your main site URL).
+Category: Select News & Media or Business & Pages.
+Click Save Changes / Switch Mode.
+As soon as the app is switched to Live Mode, every article posted will immediately be visible to the general public, followers of the Page, and anyone visiting the News Niue Facebook Page!

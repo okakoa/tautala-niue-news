@@ -31,7 +31,12 @@ A global community news web application for the island nation of Niue, featuring
 ### 4. Content Protection & Reader Engagement
 - **Intellectual Property Protection:** Comprehensive anti-copy mechanism disabling text selection (`userSelect: none`), context menu right-clicks, and copy/cut/drag events on public articles.
 - **Reader Reviews & Ratings:** Authenticated readers can rate articles (1-5 stars), recommend via thumbs up/down, and write concise reviews (max 100 words).
-- **Social Media Integration:** Manual Facebook Share button on published articles, with architecture ready for automatic Facebook Graph API posting.
+- **Social Media Integration:** Full Facebook Graph API v19.0 integration for the **News Niue** Facebook Page:
+  - **⚡ One-Click Dashboard Publishing:** `Auto-Post to FB Page` button on the Published Articles dashboard with live status badge (`✅ Posted to FB Page`), re-post capability, and `View on Facebook ↗` direct permalinks.
+  - **Homepage Card Matching:** Automatically formats the post caption to match the home webpage card preview (headline + first 2 paragraphs), followed by a direct call-to-action (`Read full article → <host_url>/article/<id>`).
+  - **Photo Upload Support:** Converts Firestore Base64 images into binary Blobs and publishes directly via the `/{page-id}/photos` endpoint so Facebook posts feature the complete article photo.
+  - **Permanent Token Integration:** Utilizes a permanent, never-expiring Page Access Token (`expires_at: 0`) and automatically prioritizes the production Host App URL (`NEXT_PUBLIC_SITE_URL`) over `localhost`.
+  - Also retains the manual web Share Dialog fallback for browser-based sharing.
 
 ### 5. Media & AI Tools
 - **Auto-Compressed Images:** Client-side image compression (max 500KB) converting uploads into Base64 strings to bypass Firebase Storage CORS restrictions.

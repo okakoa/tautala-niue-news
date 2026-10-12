@@ -29,12 +29,13 @@ This document serves as the roadmap for the Niue News web application. It outlin
 ### 2. Social Media Auto-Push
 **Goal:** Automatically push the first three paragraphs of an article, along with a link, to selected social media accounts when the article goes live.
 - **Tasks:**
-  - 📝 **Target Platform:** Facebook Page.
-  - 📝 **Credentials Needed:** Facebook Developer App, Page ID, and a never-expiring Page Access Token.
-  - 📝 **Architecture:** 
-    1. Create a secure backend API route (`/api/social/facebook`) that takes a published article, extracts the first three paragraphs, formats a link to the site, and sends it to the Facebook Graph API.
-    2. Trigger this API automatically when a moderator clicks "Approve & Publish Now" and from the backend cron job when a scheduled article goes live.
-  - 🚧 **Current Step:** Implementing a standard manual "Share to Facebook" button for moderators to test the sharing functionality before fully automating the API triggers.
+  - ✅ **Target Platform:** Facebook Page ("News Niue").
+  - ✅ **Credentials:** Facebook App, Page ID (`1358660107330903`), and Page Access Token generated & configured in `.env.local`.
+  - ✅ **Architecture:** 
+    1. Secure backend API route (`/api/social/facebook`) built: extracts headline, first 3 paragraphs, formats link to site, uploads article photo (`/photos` endpoint with Base64/Blob conversion), posts to Graph API v19.0, and records `facebookPostId` to Firestore.
+    2. Verification & Health Check: `GET /api/social/facebook` verifies live connection to Meta Graph API.
+    3. One-Click Dashboard Testing: Implemented `⚡ Auto-Post to FB Page` button on Published Articles dashboard with live status badge (`✅ Posted to FB Page`) and re-post capability.
+  - 🚧 **Future Automation:** Transition from one-click manual dashboard button to fully automatic triggers on "Approve & Publish Now" and scheduled cron release when ready.
 
 ## 📅 Phase 3: Monetization (Future Implementation)
 

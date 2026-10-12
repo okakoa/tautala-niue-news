@@ -22,8 +22,10 @@
 - `GEMINI_API_KEY`: Required for generating AI impact steps and article drafts.
 - `NEXT_PUBLIC_FIREBASE_*`: Standard Firebase client keys (API Key, Project ID, App ID, etc.).
 - `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID`: Google Analytics tracking ID.
+- `NEXT_PUBLIC_SITE_URL`: Production Host App URL (e.g. `https://tautala-niue-news--gen-lang-client-0117058947.us-east4.hosted.app`).
 - `FIREBASE_CLIENT_EMAIL` & `FIREBASE_PRIVATE_KEY`: Firebase Admin Service Account credentials.
 - `CRON_SECRET`: Optional bearer token for securing scheduled publishing cron endpoints (`/api/cron/publish-scheduled`).
+- `FACEBOOK_PAGE_ID` & `FACEBOOK_PAGE_ACCESS_TOKEN`: Facebook Graph API credentials for auto-publishing articles to the "News Niue" page.
 
 ## Role-Based Access Control (RBAC)
 - **Super Admin:** Can manage app settings, user roles, moderation queue, and use URL Analyzer.

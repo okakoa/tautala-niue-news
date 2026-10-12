@@ -10,6 +10,7 @@ export default function PublishedArticlesPage() {
   const [articles, setArticles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
+  const [postingId, setPostingId] = useState<string | null>(null);
 
   // Editing state
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -38,6 +39,43 @@ export default function PublishedArticlesPage() {
       console.error("Error fetching articles:", err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAutoPostToFacebook = async (article: any) => {
+    if (!confirm(`Are you sure you want to push "${article.title}" directly to the News Niue Facebook Page?`)) {
+      return;
+    }
+    setPostingId(article.id);
+    setMessage('');
+    try {
+      const res = await fetch('/api/social/facebook', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          articleId: article.id,
+          articleUrl: window.location.origin
+        })
+      });
+      let data: any = {};
+      try {
+        data = await res.json();
+      } catch {
+        const text = await res.text().catch(() => '');
+        throw new Error(text || `Server returned ${res.status}`);
+      }
+
+      if (data.success) {
+        setMessage(`🎉 Successfully posted "${article.title}" to Facebook Page!`);
+        fetchPublishedArticles(); // Refresh to update facebookPostId
+      } else {
+        setMessage(`❌ Facebook Error: ${data.error || 'Failed to post'}`);
+      }
+    } catch (err: any) {
+      setMessage(`❌ Error: ${err.message}`);
+    } finally {
+      setPostingId(null);
+      setTimeout(() => setMessage(''), 6000);
     }
   };
 
@@ -160,7 +198,76 @@ export default function PublishedArticlesPage() {
                     {article.content}
                   </div>
                   
-                  <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
+                    {article.facebookPostId ? (
+                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ 
+                          padding: '8px 14px', 
+                          backgroundColor: '#e6f4ea', 
+                          color: '#137333', 
+                          borderRadius: '4px', 
+                          fontWeight: 'bold', 
+                          fontSize: '13px',
+                          border: '1px solid #ceead6'
+                        }}>
+                          ✅ Posted to FB Page
+                        </span>
+                        <a 
+                          href={`https://www.facebook.com/${article.facebookPostId}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            padding: '6px 12px',
+                            backgroundColor: '#1877F2',
+                            color: '#fff',
+                            borderRadius: '4px',
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            textDecoration: 'none',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px'
+                          }}
+                        >
+                          View on Facebook ↗
+                        </a>
+                        <button 
+                          onClick={() => handleAutoPostToFacebook(article)}
+                          disabled={postingId === article.id}
+                          title="Click to post this story again to the Facebook Page"
+                          style={{ 
+                            padding: '6px 12px', 
+                            backgroundColor: '#fff', 
+                            color: '#002B7F', 
+                            border: '1px solid #002B7F', 
+                            borderRadius: '4px', 
+                            cursor: postingId === article.id ? 'not-allowed' : 'pointer', 
+                            fontSize: '12px',
+                            fontWeight: 'bold' 
+                          }}
+                        >
+                          {postingId === article.id ? 'Posting...' : 'Re-Post to FB'}
+                        </button>
+                      </div>
+                    ) : (
+                      <button 
+                        onClick={() => handleAutoPostToFacebook(article)}
+                        disabled={postingId === article.id}
+                        style={{ 
+                          padding: '8px 16px', 
+                          backgroundColor: postingId === article.id ? '#999' : '#002B7F', 
+                          color: '#fff', 
+                          border: 'none', 
+                          borderRadius: '4px', 
+                          cursor: postingId === article.id ? 'not-allowed' : 'pointer', 
+                          fontWeight: 'bold',
+                          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                        }}
+                      >
+                        {postingId === article.id ? 'Posting to FB...' : '⚡ Auto-Post to FB Page'}
+                      </button>
+                    )}
+
                     <button 
                       onClick={() => {
                         const url = encodeURIComponent(`${window.location.origin}/article/${article.id}`);
@@ -168,7 +275,7 @@ export default function PublishedArticlesPage() {
                       }}
                       style={{ padding: '8px 16px', backgroundColor: '#1877F2', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
                     >
-                      Share to Facebook
+                      Share Dialog
                     </button>
                     <button 
                       onClick={() => handleAction(article.id, 'unpublished')}
