@@ -28,8 +28,8 @@
 - `FACEBOOK_PAGE_ID` & `FACEBOOK_PAGE_ACCESS_TOKEN`: Facebook Graph API credentials for auto-publishing articles to the "News Niue" page.
 
 ## Role-Based Access Control (RBAC)
-- **Super Admin:** Can manage app settings, user roles, moderation queue, and use URL Analyzer.
-- **Admin:** Can manage user roles, moderation queue, and use URL Analyzer.
+- **Super Admin:** Can manage app settings, user roles, moderation queue, site pages (About, Contact, Privacy, Data Deletion, Terms, Social links), and use URL Analyzer.
+- **Admin:** Can manage user roles, moderation queue, site pages (About, Contact, Privacy, Data Deletion, Terms, Social links), and use URL Analyzer.
 - **Moderator:** Can review pending articles, edit story text, publish immediately, schedule future publishing, un-publish, or return stories as drafts.
 - **Standard User:** Can view published articles, read full articles, leave reviews, submit new stories for review, and edit/resubmit their own drafts.
 
@@ -39,9 +39,11 @@
   - `Pending Articles`: Status badge counting user's pending articles.
   - `Published Articles`: Status badge counting user's published articles.
   - `Un-Published Articles`: Status badge counting user's unpublished articles.
+- **Manage Site Pages:** Dedicated dashboard editor (`/dashboard/pages`) for Admins and Super Admins to update public content (About, Contact, Privacy, Data Deletion, Terms, Social channels) with live layout previews.
 - **Responsive Layout:** Collapsible sidebar on mobile devices with touch-friendly tap targets and active route highlighting.
 
 ## Content Protection & Mobile Experience
 - **Intellectual Property Protection:** Anti-highlighting (`userSelect: none`), disabled right-click context menu, and blocked cut/copy/drag handlers across public articles.
 - **Mobile Readability UX:** Compact above-the-fold hero, horizontally scrollable category chips, fluid typography (`clamp` font sizes, 1.8 line-height), and full-width thumb-friendly CTAs.
+- **Global Footer & Information Pages:** Responsive site footer providing links to "About us" (`/about`), "Contact" (`/contact`), "Privacy Policy" (`/privacy`), "Data Deletion Instructions" (`/data-deletion`), and "Terms of Service" (`/terms`), along with official social media links (Facebook, X, Instagram, YouTube) and direct admin editor access.
 

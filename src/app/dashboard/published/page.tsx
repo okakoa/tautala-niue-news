@@ -75,7 +75,7 @@ export default function PublishedArticlesPage() {
       setMessage(`❌ Error: ${err.message}`);
     } finally {
       setPostingId(null);
-      setTimeout(() => setMessage(''), 6000);
+      setTimeout(() => setMessage(''), 10000);
     }
   };
 

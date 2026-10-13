@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
   title: 'Niue News Hub - Community News',
@@ -23,8 +24,13 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AuthProvider>
-          <Navbar />
-          {children}
+          <div className="site-wrapper">
+            <Navbar />
+            <main className="site-main">
+              {children}
+            </main>
+            <Footer />
+          </div>
           <a 
             href="https://projects.oka-apps.com/" 
             target="_blank" 

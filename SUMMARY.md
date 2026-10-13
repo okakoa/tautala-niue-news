@@ -42,6 +42,19 @@ A global community news web application for the island nation of Niue, featuring
 - **Auto-Compressed Images:** Client-side image compression (max 500KB) converting uploads into Base64 strings to bypass Firebase Storage CORS restrictions.
 - **AI URL Analyzer:** Gemini-powered tool (accessible to Admins and Super Admins) that analyzes web links and extracts actionable community impact steps for Niue.
 
+### 6. Global Footer, Information Pages & Admin Content Management
+- **Brand Footer Block:** Pinned responsive footer featuring the Niue News logo, cultural motto, quick links to About Us, Contact, Privacy Policy, Terms of Service, news category shortcuts, and official social media buttons (Facebook, X, Instagram, YouTube).
+- **Public Information Pages:**
+  - **About Us (`/about`):** Celebrates the mission of Niue News, local community storytelling, diaspora connection (NZ, Australia, worldwide), and Vagahau Niue language preservation.
+  - **Contact Us (`/contact`):** Interactive contact desk with inquiries, breaking news tips, physical office details, and tip submission form.
+  - **Privacy Policy (`/privacy`):** Transparent data handling, Google Auth protections, cookie policies, and anti-scraping safeguards.
+  - **Data Deletion Instructions (`/data-deletion`):** Clear compliance instructions for Meta and Google users detailing how to request permanent account and data deletion.
+  - **Terms of Service (`/terms`):** Clear terms on article submissions, community moderation, copyright ownership, and reader reviews.
+- **Admin Site Pages Manager (`/dashboard/pages`):** 
+  - Dedicated tabbed editor for Admins and Super Admins to edit headlines, text content, contact coordinates, data deletion steps, and social media URLs in real-time.
+  - Includes formatted layout preview, "Restore Default Template" failsafe, and direct "View Live Page" permalinks.
+  - Backed by secure Admin SDK API route (`/api/admin/site-pages`) and Firestore persistence.
+
 ---
 
 ## Tech Stack

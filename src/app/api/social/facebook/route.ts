@@ -41,7 +41,11 @@ export async function GET() {
     const data = await res.json();
 
     if (data.error) {
-      return NextResponse.json({ configured: false, error: data.error }, { status: 400 });
+      let hint = '';
+      if (data.error.message?.includes('Cannot call API for app')) {
+        hint = 'Your Meta App is in Development mode and this user lacks an Administrator/Developer role in App Roles, or the token is a User token instead of a Page Access Token.';
+      }
+      return NextResponse.json({ configured: false, error: data.error, hint }, { status: 400 });
     }
 
     return NextResponse.json({
@@ -191,10 +195,17 @@ export async function POST(req: NextRequest) {
 
     if (fbData.error) {
       console.error('Facebook Graph API Error:', fbData.error);
+      let descriptiveMessage = fbData.error.message || 'Failed to publish to Facebook.';
+      if (fbData.error.code === 200 || fbData.error.message?.includes('Cannot call API for app')) {
+        descriptiveMessage = `Meta App in Development Mode: The user (${fbData.error.message?.match(/\d+$/)?.[0] || 'account'}) is not assigned an Admin/Developer role in the Meta App, or a Page Access Token is required.`;
+      } else if (fbData.error.code === 190) {
+        descriptiveMessage = `Facebook Access Token expired or invalid. Please generate a fresh Page Access Token.`;
+      }
+
       return NextResponse.json(
         {
           success: false,
-          error: fbData.error.message || 'Failed to publish to Facebook.',
+          error: descriptiveMessage,
           fbError: fbData.error,
         },
         { status: 400 }

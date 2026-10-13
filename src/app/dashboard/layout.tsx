@@ -137,14 +137,24 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
               {/* Links for admins and super admins */}
               {(role === 'super_admin' || role === 'admin') && (
-                <li>
-                  <Link 
-                    href="/dashboard/users" 
-                    className={`dashboard-menu-link ${isActive('/dashboard/users') ? 'active' : ''}`}
-                  >
-                    <span>Manage Users</span>
-                  </Link>
-                </li>
+                <>
+                  <li>
+                    <Link 
+                      href="/dashboard/users" 
+                      className={`dashboard-menu-link ${isActive('/dashboard/users') ? 'active' : ''}`}
+                    >
+                      <span>Manage Users</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link 
+                      href="/dashboard/pages" 
+                      className={`dashboard-menu-link ${isActive('/dashboard/pages') ? 'active' : ''}`}
+                    >
+                      <span>Manage Site Pages</span>
+                    </Link>
+                  </li>
+                </>
               )}
 
               {/* Links for super admins only */}
