@@ -17,18 +17,41 @@ function extractCardSnippet(content: string): string {
 }
 
 /**
+ * Helper to retrieve Facebook credentials either from environment variables
+ * or gracefully falling back to the Firestore settings/facebook document.
+ */
+async function getFacebookCredentials(): Promise<{ pageId: string; pageAccessToken: string }> {
+  let pageId = process.env.FACEBOOK_PAGE_ID || '';
+  let pageAccessToken = process.env.FACEBOOK_PAGE_ACCESS_TOKEN || '';
+
+  if (!pageId || !pageAccessToken) {
+    try {
+      const snap = await adminDb.collection('settings').doc('facebook').get();
+      if (snap.exists) {
+        const d = snap.data();
+        if (!pageId && d?.pageId) pageId = String(d.pageId);
+        if (!pageAccessToken && d?.pageAccessToken) pageAccessToken = String(d.pageAccessToken);
+      }
+    } catch (e) {
+      console.warn('Could not read Facebook credentials fallback from Firestore:', e);
+    }
+  }
+
+  return { pageId, pageAccessToken };
+}
+
+/**
  * GET /api/social/facebook
  * Health check & credential verification endpoint.
  */
 export async function GET() {
-  const pageId = process.env.FACEBOOK_PAGE_ID;
-  const pageAccessToken = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
+  const { pageId, pageAccessToken } = await getFacebookCredentials();
 
   if (!pageId || !pageAccessToken) {
     return NextResponse.json(
       {
         configured: false,
-        error: 'FACEBOOK_PAGE_ID or FACEBOOK_PAGE_ACCESS_TOKEN is missing in environment variables.',
+        error: 'FACEBOOK_PAGE_ID or FACEBOOK_PAGE_ACCESS_TOKEN is missing in environment variables and Firestore settings.',
       },
       { status: 500 }
     );
@@ -67,8 +90,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { articleId, articleUrl } = body;
 
-    const pageId = process.env.FACEBOOK_PAGE_ID;
-    const pageAccessToken = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
+    const { pageId, pageAccessToken } = await getFacebookCredentials();
 
     if (!pageId || !pageAccessToken) {
       return NextResponse.json(
