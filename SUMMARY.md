@@ -26,7 +26,7 @@ A global community news web application for the island nation of Niue, featuring
 - **Interactive Category Chips Bar:** Horizontally scrollable chip bar with touch inertia (BBC/Apple News feel) that filters stories in real-time (Community, Health, Education, Politics, Sports, Entertainment, Technology, Regional & Global).
 - **Mobile Navbar Drawer:** Sticky responsive navbar with animated slide-down hamburger drawer and thumb-friendly touch targets.
 - **Editorial Typography:** Designed for eye comfort with 17px base body size, `#1e293b` warm dark-gray contrast, 1.8 line-height, and full-width touch CTAs.
-- **Adaptive Watermark:** 120px desktop branding with automatic 75px mobile scaling and `pointer-events: none` to never obstruct touch taps or reading.
+- **Adaptive Watermark:** 90px desktop branding with automatic 56px mobile scaling and `pointer-events: none` to never obstruct touch taps or reading.
 
 ### 4. Content Protection & Reader Engagement
 - **Intellectual Property Protection:** Comprehensive anti-copy mechanism disabling text selection (`userSelect: none`), context menu right-clicks, and copy/cut/drag events on public articles.

@@ -1,4 +1,4 @@
-I'm back. Can you read our Project Configuration and Project Summary files and give me a brief run down just so we are on the same page before we start.
+I'm back. Can you read our Project CONFIGURATION.md, SUMMARY.md and IMPLEMENTATION_PLAN.md files and give me a brief run down just so we are on the same page before we start. Do NOT read any files in the my_files folder.
 ----------------------------------------------------------------------------------------------------------------------
 Can you read the most recent Implementation Plan on "Backup Firebase Data Locally (Outside Google Ecosystem)"? This is what I wanted start implementing
 ----------------------------------------------------------------------------------------------------------------------

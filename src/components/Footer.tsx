@@ -144,7 +144,16 @@ export default function Footer() {
           <ul className="footer-links-list footer-categories-grid">
             {categories.map(cat => (
               <li key={cat}>
-                <Link href={`/?category=${encodeURIComponent(cat)}`} className="footer-link">
+                <Link 
+                  href={`/?category=${encodeURIComponent(cat)}#news`} 
+                  className="footer-link"
+                  onClick={() => {
+                    const el = document.getElementById('news');
+                    if (el) {
+                      el.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                >
                   {cat}
                 </Link>
               </li>
@@ -158,17 +167,8 @@ export default function Footer() {
       <div className="footer-bottom-bar">
         <div className="container footer-bottom-container">
           <p className="footer-copyright">
-            © {year} <strong>Niue News</strong>. All rights reserved. Empowering Niuean voices globally.
+            © {year} <strong>Niue News</strong>. All rights reserved.
           </p>
-          <div className="footer-bottom-links">
-            <Link href="/about">About</Link>
-            <span className="dot-sep">•</span>
-            <Link href="/contact">Contact</Link>
-            <span className="dot-sep">•</span>
-            <Link href="/privacy">Privacy</Link>
-            <span className="dot-sep">•</span>
-            <Link href="/terms">Terms</Link>
-          </div>
         </div>
       </div>
     </footer>

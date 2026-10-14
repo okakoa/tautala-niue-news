@@ -7,7 +7,7 @@
 - **Branding:** 
   - Navy (`#002B7F` / `#001f5c`), Red (`#CE1126`), White (`#FFFFFF`), Yellow Gold (`#FCD116`).
   - Custom globe logo, favicon (`/icon.jpg`), and global bottom-right fixed watermark (`/watermark.png`) linking to Oka Apps.
-  - Watermark behavior: 120px on desktop; auto-scaled to 75px on mobile devices with `pointer-events: none` to prevent blocking touch taps or scrolling.
+  - Watermark behavior: 90px on desktop; auto-scaled to 56px on mobile devices with `pointer-events: none` to prevent blocking touch taps or scrolling.
 
 ## Technology Stack
 - **Framework:** Next.js 16 (App Router with Turbopack)

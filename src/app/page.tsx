@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase/client';
 import Link from 'next/link';
@@ -17,10 +18,39 @@ const CATEGORIES = [
   'Regional & Global',
 ];
 
-export default function Home() {
+function HomeFeed() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get('category');
+
   const [articles, setArticles] = useState<any[]>([]);
   const [articlesLoading, setArticlesLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All News');
+
+  // Sync category with URL search param
+  useEffect(() => {
+    if (categoryParam) {
+      const matched = CATEGORIES.find(
+        cat => cat.toLowerCase() === categoryParam.trim().toLowerCase()
+      );
+      if (matched) {
+        setSelectedCategory(matched);
+      } else {
+        setSelectedCategory('All News');
+      }
+    } else {
+      setSelectedCategory('All News');
+    }
+  }, [categoryParam]);
+
+  const handleSelectCategory = (cat: string) => {
+    setSelectedCategory(cat);
+    if (cat === 'All News') {
+      router.replace('/', { scroll: false });
+    } else {
+      router.replace(`/?category=${encodeURIComponent(cat)}`, { scroll: false });
+    }
+  };
 
   useEffect(() => {
     // Fetch Published Articles
@@ -69,7 +99,7 @@ export default function Home() {
           </p>
 
           {/* Interactive Category Chips Bar */}
-          <div className="categories-wrapper">
+          <div className="categories-wrapper" id="categories">
             <div className="categories-container" role="tablist" aria-label="News categories">
               {CATEGORIES.map((cat) => {
                 const isActive = selectedCategory === cat;
@@ -79,7 +109,7 @@ export default function Home() {
                     type="button"
                     role="tab"
                     aria-selected={isActive}
-                    onClick={() => setSelectedCategory(cat)}
+                    onClick={() => handleSelectCategory(cat)}
                     className={`category-chip ${isActive ? 'active' : ''}`}
                   >
                     {cat}
@@ -92,7 +122,7 @@ export default function Home() {
       </section>
 
       {/* --- COMMUNITY NEWS SECTION --- */}
-      <section className="news-section">
+      <section className="news-section" id="news">
         <div className="container" style={{ maxWidth: '860px', margin: '0 auto' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
             <h2 className="news-section-title" style={{ margin: 0, textAlign: 'left', borderBottom: 'none' }}>
@@ -101,7 +131,7 @@ export default function Home() {
             {selectedCategory !== 'All News' && (
               <button
                 type="button"
-                onClick={() => setSelectedCategory('All News')}
+                onClick={() => handleSelectCategory('All News')}
                 style={{
                   background: 'none',
                   border: 'none',
@@ -134,7 +164,7 @@ export default function Home() {
                   <>Check back soon, or <Link href="/submit" style={{ color: '#CE1126', fontWeight: 'bold', textDecoration: 'underline' }}>submit a story</Link> yourself!</>
                 ) : (
                   <button 
-                    onClick={() => setSelectedCategory('All News')}
+                    onClick={() => handleSelectCategory('All News')}
                     style={{ background: '#002B7F', color: '#FFFFFF', border: 'none', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', marginTop: '10px' }}
                   >
                     View All Stories
@@ -233,3 +263,15 @@ export default function Home() {
   );
 }
 
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <div style={{ textAlign: 'center', color: '#666', padding: '80px 20px' }}>
+        <div className="spinner" style={{ margin: '0 auto 16px auto' }}></div>
+        <p style={{ fontWeight: 500 }}>Loading Niue News...</p>
+      </div>
+    }>
+      <HomeFeed />
+    </Suspense>
+  );
+}
