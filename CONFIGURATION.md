@@ -25,7 +25,13 @@
 - `NEXT_PUBLIC_SITE_URL`: Production Host App URL (e.g. `https://tautala-niue-news--gen-lang-client-0117058947.us-east4.hosted.app`).
 - `FIREBASE_CLIENT_EMAIL` & `FIREBASE_PRIVATE_KEY`: Firebase Admin Service Account credentials.
 - `CRON_SECRET`: Optional bearer token for securing scheduled publishing cron endpoints (`/api/cron/publish-scheduled`).
-- `FACEBOOK_PAGE_ID` & `FACEBOOK_PAGE_ACCESS_TOKEN`: Facebook Graph API credentials for auto-publishing articles to the "News Niue" page.
+- `FACEBOOK_PAGE_ID` & `FACEBOOK_PAGE_ACCESS_TOKEN`: Facebook Graph API credentials for auto-publishing articles to the "News Niue" page (`1358660107330903`). Dual-sourced: loaded via environment variables or securely from Firestore (`settings/facebook`) for seamless Firebase App Hosting production execution.
+
+## Meta Developer & Compliance URLs (Production)
+- **Host Domain:** `https://tautala-niue-news--gen-lang-client-0117058947.us-east4.hosted.app`
+- **Privacy Policy:** `/privacy` (`https://tautala-niue-news--gen-lang-client-0117058947.us-east4.hosted.app/privacy`)
+- **Terms of Service:** `/terms` (`https://tautala-niue-news--gen-lang-client-0117058947.us-east4.hosted.app/terms`)
+- **User Data Deletion Callback:** `/data-deletion` (`https://tautala-niue-news--gen-lang-client-0117058947.us-east4.hosted.app/data-deletion`)
 
 ## Role-Based Access Control (RBAC)
 - **Super Admin:** Can manage app settings, user roles, moderation queue, site pages (About, Contact, Privacy, Data Deletion, Terms, Social links), and use URL Analyzer.

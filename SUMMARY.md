@@ -35,7 +35,7 @@ A global community news web application for the island nation of Niue, featuring
   - **⚡ One-Click Dashboard Publishing:** `Auto-Post to FB Page` button on the Published Articles dashboard with live status badge (`✅ Posted to FB Page`), re-post capability, and `View on Facebook ↗` direct permalinks.
   - **Homepage Card Matching:** Automatically formats the post caption to match the home webpage card preview (headline + first 2 paragraphs), followed by a direct call-to-action (`Read full article → <host_url>/article/<id>`).
   - **Photo Upload Support:** Converts Firestore Base64 images into binary Blobs and publishes directly via the `/{page-id}/photos` endpoint so Facebook posts feature the complete article photo.
-  - **Permanent Token Integration:** Utilizes a permanent, never-expiring Page Access Token (`expires_at: 0`) and automatically prioritizes the production Host App URL (`NEXT_PUBLIC_SITE_URL`) over `localhost`.
+  - **Permanent Token & Dual Resolution:** Utilizes a permanent Page Access Token with dual resolution (environment variables + secure Firestore `settings/facebook` fallback) to guarantee seamless operation in both local development and Firebase App Hosting Cloud Run production, verified live connecting to Page `1358660107330903`.
   - Also retains the manual web Share Dialog fallback for browser-based sharing.
 
 ### 5. Media & AI Tools

@@ -26,15 +26,16 @@ This document serves as the roadmap for the Niue News web application. It outlin
   - ✅ Update the Moderation UI to include a Date/Time picker when approving an article.
   - ✅ Implement a backend cron job API route to automatically transition articles from `scheduled` to `published` status when the time is reached.
 
-### 2. Social Media Auto-Push
+### 2. Social Media Auto-Push (Completed & Production Verified)
 **Goal:** Automatically push the first three paragraphs of an article, along with a link, to selected social media accounts when the article goes live.
 - **Tasks:**
-  - ✅ **Target Platform:** Facebook Page ("News Niue").
-  - ✅ **Credentials:** Facebook App, Page ID (`1358660107330903`), and Page Access Token generated & configured in `.env.local`.
+  - ✅ **Target Platform:** Facebook Page ("News Niue" — ID `1358660107330903`).
+  - ✅ **Credentials & Production Storage:** Page Access Token configured with dual fallback (environment variables + secure Firestore `settings/facebook` document) ensuring immediate functionality in both local development and Firebase App Hosting Cloud Run production.
+  - ✅ **Meta App Live Mode Prerequisites:** Created and deployed live public compliance endpoints (`/privacy`, `/terms`, `/data-deletion`).
   - ✅ **Architecture:** 
-    1. Secure backend API route (`/api/social/facebook`) built: extracts headline, first 3 paragraphs, formats link to site, uploads article photo (`/photos` endpoint with Base64/Blob conversion), posts to Graph API v19.0, and records `facebookPostId` to Firestore.
-    2. Verification & Health Check: `GET /api/social/facebook` verifies live connection to Meta Graph API.
-    3. One-Click Dashboard Testing: Implemented `⚡ Auto-Post to FB Page` button on Published Articles dashboard with live status badge (`✅ Posted to FB Page`) and re-post capability.
+    1. Secure backend API route (`/api/social/facebook`) built: extracts headline, first 2 paragraphs (matching home card), formats link to site, uploads article photo (`/photos` endpoint with Base64/Blob conversion), posts to Graph API v19.0, and records `facebookPostId` to Firestore.
+    2. Verification & Health Check: `GET /api/social/facebook` verified live and active in production returning `{"configured": true, "page": {"name": "News Niue"}}`.
+    3. One-Click Dashboard Publishing: Verified working `⚡ Auto-Post to FB Page` button on Published Articles dashboard with live status badge (`✅ Posted to FB Page`) and re-post capability.
   - 🚧 **Future Automation:** Transition from one-click manual dashboard button to fully automatic triggers on "Approve & Publish Now" and scheduled cron release when ready.
 
 ## 📅 Phase 3: Monetization (Future Implementation)
